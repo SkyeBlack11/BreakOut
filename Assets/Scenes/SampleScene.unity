@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 0
+  _paddle: {fileID: 1772830152}
 --- !u!212 &490791740
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -620,7 +621,7 @@ Transform:
   m_GameObject: {fileID: 1838567540}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.89, y: -3.06, z: 0}
+  m_LocalPosition: {x: 8.89, y: 5.01, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -704,7 +705,7 @@ Transform:
   m_GameObject: {fileID: 1877249861}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.89, y: -3.06, z: 0}
+  m_LocalPosition: {x: -8.89, y: -4.96, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
