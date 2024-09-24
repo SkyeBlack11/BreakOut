@@ -31,14 +31,20 @@ public class BallBahaviour : MonoBehaviour
                 Velocity.y = -Velocity.y;
                 Velocity.x = Random.Range(-MaxHorizontalVelocity, MaxHorizontalVelocity);
             }
+
         //This one is for bounce and walls
-        if(_position.y > PaddleController.Instance.MaxPosition.transform.position.y)
+        if(_position.y > PaddleController.Instance.MaxPosition.transform.position.y)//Too High
             Velocity.y = -Velocity.y;
         if(_position.x > PaddleController.Instance.MaxPosition.transform.position.x || 
-            _position.x < PaddleController.Instance.MinPosition.transform.position.x)
+            _position.x < PaddleController.Instance.MinPosition.transform.position.x) //Walls
         {
             Velocity.x = -Velocity.x;
         }
+        if(_position.y < PaddleController.Instance.MinPosition.transform.position.y)//Too Low
+        {
+            GameManager.Instance.BallOutofBounds(gameObject);
+        }
+            
 
         transform.position += Velocity * Time.deltaTime;
     }
