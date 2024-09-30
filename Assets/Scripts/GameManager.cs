@@ -7,9 +7,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public GameObject BallPrefab;
+    public GameObject[] Bricks;
     public float RespawnTimer;
     [HideInInspector] public bool GameRunning;
     [SerializeField] private GameObject _failurePanel;
+    [SerializeField] private GameObject _winPanel;
     [SerializeField] private TextMeshProUGUI _ballText;
     [SerializeField, Range(0, 10)] private int _maxRespawns;
     private int _respawnCount = 0;
@@ -18,6 +20,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         _failurePanel.SetActive(false);
+        _winPanel.SetActive(false);
         GameRunning = true;
         Instantiate(BallPrefab);
         UpdateBallText();
@@ -40,6 +43,18 @@ public class GameManager : MonoBehaviour
             GameRunning = false;
             _failurePanel.SetActive(true);
         }
+    }
+
+    public void CheckForWin(GameObject ball)
+    {
+        foreach (GameObject brick in Bricks)
+        {
+            if (brick != null) return; 
+        }
+        GameRunning = false;
+        Destroy(ball);
+        _winPanel.SetActive(true);
+        //Debug.LogWarning("Hurray!");
     }
 
     private IEnumerator WaitandRespawn()

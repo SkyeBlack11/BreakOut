@@ -6,47 +6,51 @@ public class BallBahaviour : MonoBehaviour
 {
     public Vector3 Velocity;
     public float MaxHorizontalVelocity;
-    private Vector3 _position, _scale, _paddlePosition, _paddleScale;
-    void Start()
-    {
-
-    }
 
     void Update()
     {
-
-        //Debug.Log(PaddleController.Instance.transform.position.x);
-        _position = transform.position;
-        _scale = transform.localScale;
-        _paddlePosition = PaddleController.Instance.transform.position;
-        _paddleScale = PaddleController.Instance.transform.localScale;
-
-        if( //This one is for intersection
-            _position.x + _scale.x /2f >= _paddlePosition.x - _paddleScale.x /2f &&
-            _position.x - _scale.x /2f <= _paddlePosition.x + _paddleScale.x /2f &&
-            _position.y + _scale.y /2f >= _paddlePosition.y - _paddleScale.y /2f &&
-            _position.y - _scale.y /2f <= _paddlePosition.y + _paddleScale.y /2f)
+        if (CollidesWithGameObject(PaddleController.Instance.gameObject))
+        {
+            Velocity.y = -Velocity.y;
+            Vector3 PaddleToBall = transform.position - PaddleController.Instance.transform.position;
+            Velocity.x = PaddleToBall.x * MaxHorizontalVelocity;
+        }
+        for(int i = 0; i < GameManager.Instance.Bricks.Length; i++)
+        {
+            if (GameManager.Instance.Bricks[i] && CollidesWithGameObject(GameManager.Instance.Bricks[i]))
             {
-                //Debug.Log("Maybe we are intersecting");
+                Destroy(GameManager.Instance.Bricks[i]);
+                GameManager.Instance.Bricks[i] = null;
                 Velocity.y = -Velocity.y;
-                Velocity.x = Random.Range(-MaxHorizontalVelocity, MaxHorizontalVelocity);
+                GameManager.Instance.CheckForWin(gameObject);
+                break;
             }
+        }
 
         //This one is for bounce and walls
-        if(_position.y > PaddleController.Instance.MaxPosition.transform.position.y)//Too High
+        if (transform.position.y > PaddleController.Instance.MaxPosition.transform.position.y)//Too High
             Velocity.y = -Velocity.y;
-        if(_position.x > PaddleController.Instance.MaxPosition.transform.position.x || 
-            _position.x < PaddleController.Instance.MinPosition.transform.position.x) //Walls
+        if (transform.position.x > PaddleController.Instance.MaxPosition.transform.position.x ||
+            transform.position.x < PaddleController.Instance.MinPosition.transform.position.x) //Walls
         {
             Velocity.x = -Velocity.x;
         }
-        if(_position.y < PaddleController.Instance.MinPosition.transform.position.y)//Too Low
+        if (transform.position.y < PaddleController.Instance.MinPosition.transform.position.y)//Too Low
         {
             GameManager.Instance.BallOutofBounds(gameObject);
         }
-            
+
 
         transform.position += Velocity * Time.deltaTime;
+    }
+
+    private bool CollidesWithGameObject(GameObject other)
+    {
+        return
+        transform.position.x + transform.localScale.x / 2f >= other.transform.position.x - other.transform.localScale.x / 2f &&
+        transform.position.x - transform.localScale.x / 2f <= other.transform.position.x + other.transform.localScale.x / 2f &&
+        transform.position.y + transform.localScale.y / 2f >= other.transform.position.y - other.transform.localScale.y / 2f &&
+        transform.position.y - transform.localScale.y / 2f <= other.transform.position.y + other.transform.localScale.y / 2f;
     }
         
 }
